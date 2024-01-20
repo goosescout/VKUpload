@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">VKUpload</string>
+    <integer name="com_vk_sdk_AppId">51835781</integer>
 </resources>
