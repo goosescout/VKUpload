@@ -1,26 +1,29 @@
-package com.goosescout.vkupload.ui.components
+package com.goosescout.vkupload.ui.welcome
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.vk.api.sdk.VK
+import com.goosescout.vkupload.ui.state.UserViewModel
 import com.vk.api.sdk.auth.VKAuthenticationResult
 import com.vk.api.sdk.auth.VKScope
 
 @Composable
 fun LoginButton(
-    onSuccess: (VKAuthenticationResult) -> Unit,
-    onFail: (VKAuthenticationResult) -> Unit
+    userViewModel: UserViewModel,
+    onBeforeLaunch: () -> Unit = {},
+    onSuccess: (VKAuthenticationResult) -> Unit = {},
+    onFail: (VKAuthenticationResult) -> Unit = {}
 ) {
     val vkAuthLauncher = rememberLauncherForActivityResult(
-        VK.getVKAuthActivityResultContract()
+        userViewModel.getLoginActivityResultContract()
     ) { result ->
         when (result) {
             is VKAuthenticationResult.Success -> onSuccess(result)
@@ -29,8 +32,12 @@ fun LoginButton(
     }
 
     Button(
-        onClick = { vkAuthLauncher.launch(listOf(VKScope.PHOTOS)) },
+        onClick = {
+            onBeforeLaunch()
+            vkAuthLauncher.launch(listOf(VKScope.PHOTOS))
+        },
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+        modifier = Modifier.wrapContentWidth().wrapContentHeight()
     ) {
         Text(
             text = "Войти через VK ID",
