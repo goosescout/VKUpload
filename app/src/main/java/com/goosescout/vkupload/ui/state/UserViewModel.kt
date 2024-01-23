@@ -42,14 +42,18 @@ class UserViewModel (
 
         viewModelScope.launch {
             val namesDeferred = async { userRepository.getNames() }
+            val albumsDeferred = async { userRepository.getAlbums() }
+
             val names = namesDeferred.await()
+            val albums = albumsDeferred.await()
 
             _uiState.update {
                 it.copy(
                     isLoading = false,
                     isLoggedIn = true,
                     firstName = names[0] ?: "",
-                    lastName = names[1] ?: ""
+                    lastName = names[1] ?: "",
+                    albums = albums
                 )
 
             }

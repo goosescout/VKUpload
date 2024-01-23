@@ -43,6 +43,7 @@ fun WelcomeScreen(
             LoginButton(
                 userViewModel = userViewModel,
                 onSuccess = {
+                    userViewModel.login()
                     navController.navigate("upload")
                 }
             )

@@ -1,6 +1,6 @@
 package com.goosescout.vkupload.ui.upload
 
-import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -15,14 +15,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.vk.api.sdk.VK
-import com.vk.api.sdk.auth.VKAuthenticationResult
-import com.vk.api.sdk.auth.VKScope
+import androidx.compose.ui.unit.sp
+import com.goosescout.vkupload.ui.state.UserViewModel
 
 @Composable
 fun LogoutButton(
-    onLogout: () -> Unit = {}
+    userViewModel: UserViewModel,
+    onLogout: () -> Unit = {},
 ) {
     var isDialogShowing by remember { mutableStateOf(false) }
 
@@ -45,17 +46,39 @@ fun LogoutButton(
             title = { Text("Выход") },
             text = { Text("Вы уверены, что хотите выйти?") },
             confirmButton = {
-                Button(onClick = {
-                    VK.logout()
-                    onLogout()
-                    isDialogShowing = false
-                }) {
-                    Text("Подтвердить")
+                Button(
+                    onClick = {
+                        userViewModel.logout()
+                        onLogout()
+                        isDialogShowing = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    modifier = Modifier.wrapContentWidth().wrapContentHeight(),
+                    contentPadding = PaddingValues(2.dp)
+                ) {
+                    Text(
+                        text = "Подтвердить",
+                        fontSize = 18.sp
+                    )
                 }
             },
             dismissButton = {
-                Button(onClick = { isDialogShowing = false }) {
-                    Text("Отмена")
+                Button(
+                    onClick = { isDialogShowing = false },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.primary
+                    ),
+                    modifier = Modifier.wrapContentWidth().wrapContentHeight(),
+                    contentPadding = PaddingValues(2.dp)
+                ) {
+                    Text(
+                        text = "Отмена",
+                        fontSize = 18.sp
+                    )
                 }
             }
         )

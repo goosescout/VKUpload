@@ -1,6 +1,7 @@
 package com.goosescout.vkupload.data
 
 import androidx.activity.result.contract.ActivityResultContract
+import com.goosescout.vkupload.model.Album
 import com.vk.api.sdk.auth.VKAuthenticationResult
 import com.vk.api.sdk.auth.VKScope
 
@@ -9,4 +10,5 @@ interface UserRepository {
     fun logout()
     fun isLoggedIn(): Boolean
     suspend fun getNames(): List<String?>
+    suspend fun getAlbums(): List<Album>
 }
