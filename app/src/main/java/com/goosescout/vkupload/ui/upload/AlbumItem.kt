@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -54,10 +55,11 @@ fun AlbumItem(
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = modifier.clickable {
-            if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED) {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            } else {
-                requestPermissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
+            if (!album.isLoading) {
+                if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.READ_MEDIA_IMAGES) == PackageManager.PERMISSION_GRANTED)
+                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                else
+                    requestPermissionLauncher.launch(android.Manifest.permission.READ_MEDIA_IMAGES)
             }
         },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
@@ -74,17 +76,26 @@ fun AlbumItem(
                     .height(142.dp)
                     .align(Alignment.CenterHorizontally)
             )
-            Text(
-                text = album.title,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                color = MaterialTheme.colorScheme.onSecondary,
-                fontWeight = FontWeight.Bold
-            )
-            Text(
-                text = "Фотографий: ${album.size}",
-                color = MaterialTheme.colorScheme.onSecondary,
-            )
+            if (album.isLoading) {
+                Text(
+                    text = "Загрузка...",
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center
+                )
+            } else {
+                Text(
+                    text = album.title,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSecondary,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Фотографий: ${album.size}",
+                    color = MaterialTheme.colorScheme.onSecondary,
+                )
+            }
         }
     }
 }

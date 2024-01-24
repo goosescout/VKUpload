@@ -37,12 +37,16 @@ class UserViewModel (
     }
 
     fun uploadPhotos(albumId: Int, uris: List<Uri>) {
+        _uiState.update {
+            it.copy(albums = it.albums.map { album -> if (album.id == albumId) album.copy(isLoading = true) else album })
+        }
+
         viewModelScope.launch {
             val uploadResultDeferred = async { userRepository.uploadPhotos(albumId, uris) }
             uploadResultDeferred.await()
 
             _uiState.update {
-                it.copy(albums = it.albums.map { album -> if (album.id == albumId) album.copy(size = album.size + uris.size) else album })
+                it.copy(albums = it.albums.map { album -> if (album.id == albumId) album.copy(size = album.size + uris.size, isLoading = false) else album })
             }
         }
     }
