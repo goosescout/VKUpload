@@ -17,7 +17,8 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Color.White,
     errorContainer = VKRed,
     secondary = VKLightBlue,
-    onSecondary = Color.Black
+    onSecondary = Color.Black,
+    tertiary = Color.LightGray,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -25,7 +26,8 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Color.White,
     errorContainer = VKRed,
     secondary = VKLightBlue,
-    onSecondary = Color.Black
+    onSecondary = Color.Black,
+    tertiary = Color.LightGray,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),

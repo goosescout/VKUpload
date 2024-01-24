@@ -51,7 +51,7 @@ class UserViewModel (
         }
     }
 
-    private fun refreshAll() {
+    fun refreshAll() {
         if (!userRepository.isLoggedIn()) return
 
         _uiState.update { it.copy(isLoading = true) }
