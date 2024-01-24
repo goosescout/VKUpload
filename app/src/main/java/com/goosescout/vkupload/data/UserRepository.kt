@@ -1,5 +1,6 @@
 package com.goosescout.vkupload.data
 
+import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContract
 import com.goosescout.vkupload.model.Album
 import com.vk.api.sdk.auth.VKAuthenticationResult
@@ -11,4 +12,5 @@ interface UserRepository {
     fun isLoggedIn(): Boolean
     suspend fun getNames(): List<String?>
     suspend fun getAlbums(): List<Album>
+    suspend fun uploadPhotos(albumId: Int, uris: List<Uri>)
 }

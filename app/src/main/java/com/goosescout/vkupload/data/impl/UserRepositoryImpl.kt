@@ -1,5 +1,6 @@
 package com.goosescout.vkupload.data.impl
 
+import android.net.Uri
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContract
 import com.goosescout.vkupload.data.UserRepository
@@ -58,6 +59,21 @@ class UserRepositoryImpl : UserRepository {
                     continuation.resume(result.items.map {
                         Album(it.id, it.title, it.size, it.thumbSrc!!)
                     })
+                }
+
+                override fun fail(error: Exception) {
+                    continuation.resumeWithException(error)
+                }
+            })
+        }
+    }
+
+    override suspend fun uploadPhotos(albumId: Int, uris: List<Uri>) {
+        return suspendCancellableCoroutine { continuation ->
+            VK.execute(VKUploadToAlbumCommand(albumId, uris), object : VKApiCallback<Unit> {
+                override fun success(result: Unit) {
+                    Log.d("VK", "Photos uploaded successfully")
+                    continuation.resume(Unit)
                 }
 
                 override fun fail(error: Exception) {

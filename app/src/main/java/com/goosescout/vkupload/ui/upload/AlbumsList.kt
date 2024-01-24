@@ -26,7 +26,10 @@ fun AlbumsList(
             items(uiState.albums.size) { index ->
                 AlbumItem(
                     album = uiState.albums[index],
-                    modifier = Modifier.padding(8.dp).height(240.dp)
+                    modifier = Modifier.padding(8.dp).height(240.dp),
+                    uploadPhotos = { albumId, uris ->
+                        userViewModel.uploadPhotos(albumId, uris)
+                    }
                 )
             }
         }
