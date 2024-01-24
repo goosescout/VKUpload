@@ -39,7 +39,7 @@ class UserViewModel (
     fun uploadPhotos(albumId: Int, uris: List<Uri>) {
         viewModelScope.launch {
             val uploadResultDeferred = async { userRepository.uploadPhotos(albumId, uris) }
-            val uploadResult = uploadResultDeferred.await()
+            uploadResultDeferred.await()
 
             _uiState.update {
                 it.copy(albums = it.albums.map { album -> if (album.id == albumId) album.copy(size = album.size + uris.size) else album })

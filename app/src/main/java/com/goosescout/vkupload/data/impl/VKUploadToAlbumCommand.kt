@@ -6,6 +6,7 @@ import com.goosescout.vkupload.model.VKFileUploadInfo
 import com.goosescout.vkupload.model.VKServerUploadInfo
 import com.vk.api.sdk.VKApiJSONResponseParser
 import com.vk.api.sdk.VKApiManager
+import com.vk.api.sdk.VKApiProgressListener
 import com.vk.api.sdk.VKHttpPostCall
 import com.vk.api.sdk.VKMethodCall
 import com.vk.api.sdk.exceptions.VKApiIllegalResponseException
@@ -15,8 +16,9 @@ import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 class VKUploadToAlbumCommand(private val albumId: Int,
-                             private val photos: List<Uri> = listOf()): ApiCommand<Unit>() {
-    override fun onExecute(manager: VKApiManager): Unit {
+                             private val photos: List<Uri> = listOf(),
+                             private val progressListener: VKApiProgressListener? = null): ApiCommand<Unit>() {
+    override fun onExecute(manager: VKApiManager) {
         if (photos.isNotEmpty()) {
             val uploadInfo = getServerUploadInfo(manager)
             Log.d("VK", "Server upload info: ${uploadInfo.uploadUrl}")
@@ -29,7 +31,7 @@ class VKUploadToAlbumCommand(private val albumId: Int,
                 fileUploadCall.args("file${index + 1}", photo, "image.jpg")
             }
 
-            val fileUploadInfo = manager.execute(fileUploadCall.build(), null, FileUploadInfoParser())
+            val fileUploadInfo = manager.execute(fileUploadCall.build(), progressListener, FileUploadInfoParser())
             getSaveInfo(manager, fileUploadInfo)
         }
     }
