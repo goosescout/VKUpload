@@ -3,7 +3,7 @@ package com.goosescout.vkupload.ui.upload
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,7 +29,7 @@ fun UploadScreen(
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .padding(12.dp, 16.dp)) {
+        .padding(12.dp, 16.dp, 12.dp, 0.dp)) {
         if (uiState.isLoading) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         } else {
@@ -38,13 +38,23 @@ fun UploadScreen(
                 color = MaterialTheme.colorScheme.background
             ) {
                 Column(
-                    modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Top,
                 ) {
-                    Text(
-                        text = "Привет, ${uiState.firstName}!",
-                        style = MaterialTheme.typography.titleMedium
-                    )
+                    Row (
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Привет, ${uiState.firstName}!",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.weight(1f)
+                        )
+                        LogoutButton(
+                            userViewModel = userViewModel,
+                            onLogout = {
+                                navController.navigate("welcome")
+                            }
+                        )
+                    }
                     Divider(modifier = Modifier.padding(top = 12.dp, bottom = 12.dp))
                     Text(
                         text = "Кликните по альбому, чтобы начать загружать в него фотографии:",
@@ -53,16 +63,6 @@ fun UploadScreen(
                     )
 
                     AlbumsList(userViewModel = userViewModel)
-
-                    Spacer(Modifier.weight(1f))
-
-                    Divider(modifier = Modifier.padding(top = 12.dp, bottom = 12.dp))
-                    LogoutButton(
-                        userViewModel,
-                        onLogout = {
-                            navController.navigate("welcome")
-                        }
-                    )
                 }
             }
         }

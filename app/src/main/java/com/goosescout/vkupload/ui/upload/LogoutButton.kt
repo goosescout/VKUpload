@@ -22,21 +22,22 @@ import com.goosescout.vkupload.ui.state.UserViewModel
 
 @Composable
 fun LogoutButton(
+    modifier: Modifier = Modifier,
     userViewModel: UserViewModel,
-    onLogout: () -> Unit = {},
+    onLogout: () -> Unit = {}
 ) {
     var isDialogShowing by remember { mutableStateOf(false) }
 
     Button(
         onClick = { isDialogShowing = true },
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.errorContainer),
-        modifier = Modifier.wrapContentWidth().wrapContentHeight()
+        modifier = modifier.wrapContentWidth().wrapContentHeight()
     ) {
         Text(
             text = "Выйти",
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.padding(start = 8.dp, end = 8.dp, top = 6.dp, bottom = 6.dp)
+            modifier = Modifier.padding(2.dp)
         )
     }
 
