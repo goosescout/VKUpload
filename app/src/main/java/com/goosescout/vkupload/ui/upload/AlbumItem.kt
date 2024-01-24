@@ -30,6 +30,8 @@ import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.goosescout.vkupload.model.Album
 
+const val MAX_PHOTO_COUNT = 20
+
 @Composable
 fun AlbumItem(
     modifier: Modifier = Modifier,
@@ -38,7 +40,7 @@ fun AlbumItem(
 ) {
     val context = LocalContext.current
 
-    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) { uris ->
+    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(MAX_PHOTO_COUNT)) { uris ->
         if (uris.isNotEmpty()) {
             uploadPhotos(album.id, uris)
         }

@@ -20,19 +20,23 @@ class VKUploadToAlbumCommand(private val albumId: Int,
                              private val progressListener: VKApiProgressListener? = null): ApiCommand<Unit>() {
     override fun onExecute(manager: VKApiManager) {
         if (photos.isNotEmpty()) {
-            val uploadInfo = getServerUploadInfo(manager)
-            Log.d("VK", "Server upload info: ${uploadInfo.uploadUrl}")
+            val chunks = photos.chunked(5)
 
-            val fileUploadCall = VKHttpPostCall.Builder()
-                .url(uploadInfo.uploadUrl)
-                .timeout(TimeUnit.MINUTES.toMillis(5))
-                .retryCount(1)
-            for ((index, photo) in photos.withIndex()) {
-                fileUploadCall.args("file${index + 1}", photo, "image.jpg")
+            chunks.forEach { chunk ->
+                val uploadInfo = getServerUploadInfo(manager)
+                Log.d("VK", "Server upload info: ${uploadInfo.uploadUrl}")
+
+                val fileUploadCall = VKHttpPostCall.Builder()
+                    .url(uploadInfo.uploadUrl)
+                    .timeout(TimeUnit.MINUTES.toMillis(5))
+                    .retryCount(1)
+                for ((index, photo) in chunk.withIndex()) {
+                    fileUploadCall.args("file${index + 1}", photo, "image.jpg")
+                }
+
+                val fileUploadInfo = manager.execute(fileUploadCall.build(), progressListener, FileUploadInfoParser())
+                getSaveInfo(manager, fileUploadInfo)
             }
-
-            val fileUploadInfo = manager.execute(fileUploadCall.build(), progressListener, FileUploadInfoParser())
-            getSaveInfo(manager, fileUploadInfo)
         }
     }
 
