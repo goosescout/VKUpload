@@ -31,7 +31,8 @@ fun UploadScreen(
 
     Box(modifier = Modifier
         .fillMaxSize()
-        .padding(12.dp, 16.dp, 12.dp, 0.dp)) {
+        .padding(12.dp, 16.dp, 12.dp, 0.dp)
+    ) {
         if (uiState.isLoading) {
             CircularProgressIndicator(Modifier.align(Alignment.Center))
         } else {
